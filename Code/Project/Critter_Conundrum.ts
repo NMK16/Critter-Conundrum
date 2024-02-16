@@ -1,39 +1,10 @@
+import * as BinaryTreeData from './animal_data.json';
 //type: mammal, reptile, insect, avians
 //skin: dotted fur, striped fur, fur, feathers, hair, scales
 //feet: hooves, paws, 
-const Animals: Array<Record<string, string>> = 
-                [{name: "Lion", element: "land", diet: "carnivore", 
-                  type: "mammal", skin: "fur", domesticated: "false"},
-                     
-                 {name: "Eagle", element: "air", diet: "carnivore", 
-                  type: "avian", skin: "feathers", domesticated: "false"},
-                     
-                 {name: "Shark", element: "water", diet: "carnivore", 
-                  type: "fish", skin: "scales", domesticated: "false"},
-                     
-                 {name: "Salmon", element: "water", diet: "herbivore", 
-                  type: "fish", skin: "scales", domesticated: "false"},
-                     
-                 {name: "Crab", element: "water", diet: "omnivore", 
-                  type: "shellfish", skin: "exoskeleton", domesticated: "false"},
-                     
-                 {name: "Cat", element: "land", diet: "omnivore", 
-                  type: "mammal", skin: "fur", domesticated: "true"},
-                     
-                 {name: "Dog", element: "land", diet: "omnivore", 
-                  type: "mammal", skin: "fur", domesticated: "true"},
-                     
-                 {name: "Pidgeon", element: "air", diet: "omnivore", 
-                  type: "avian", skin: "feathers", domesticated: "true"},
-                    
-                 {name: "Horse", element: "land", diet: "herbivore", 
-                  type: "mammal", skin: "hair", domesticated: "true"},
-                     
-                 {name: "Elephant", element: "land", diet: "herbivore", 
-                  type: "mammal", skin: "skin", domesticated: "false"},
+// console.log(BinaryTreeData);
 
-                 {name: "Ant", element: "land", diet: "herbivore", 
-                  type: "insect", skin: "exoskeleton", domesticated: "false"},];
+
 //Questions
 //Does it fly/live in water/live on land?
 
@@ -45,27 +16,32 @@ const Animals: Array<Record<string, string>> =
 
 //Is it domesticated?
 
-export function one_turn(animals: Array<Record<string, string>>): Array<Record<string, string>> {
-	let on_land: number = 0;
-	let in_water: number = 0;
-	let in_air: number = 0;
+type Leaf = string;
+type Tree = {value: string, left: Tree, right: Tree} | Leaf;
 
-	let carnivore: number = 0;
-	let omnivore: number = 0;
-	let herbivore: number = 0;
-
-	let mammal: number = 0;
-	let avian: number = 0;
-	let reptile: number = 0;
-	let insect: number = 0;
-
-	let exoskeleton: number = 0;
-	let fur: number = 0;
-	let hair: number = 0;
-	let scales: number = 0;
-	let feathers: number = 0;
-	let skin: number = 0;
-
-	let domesticated: number = 0;
-	let not_domesticated: number = 0;
+function game_turn(tree: Tree) {
+	if(typeof(tree) === "string") {
+		console.log("Are you thinking of a " + tree + "?  (y/n)");
+	} else {
+		const readline = require('readline').createInterface({
+			input: process.stdin,
+			output: process.stdout
+		});
+		
+		readline.question(tree.value + " (y/n) -> ", userInput  => {
+		if(userInput === "y"){
+			readline.close();
+			game_turn(tree.right);
+		} else if(userInput === "n" ){
+			readline.close();
+			game_turn(tree.left);
+		} else {
+			console.log("Wrong input");
+			readline.close();
+			game_turn(tree);
+			}
+		});
+	}
 }
+game_turn(BinaryTreeData);
+

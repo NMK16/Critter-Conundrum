@@ -1,0 +1,46 @@
+{
+    "value": "Does it live on land?",
+    "left": {
+      "value": "Does it fly?",
+      "left": {
+        "value": "Is it a carnivore?",
+        "left": {
+            "value": "Does it have an exoskeleton?",
+            "left": "Salmon",
+            "right": "Crab"
+          },
+        "right": "Shark"
+      },
+      "right": {
+        "value": "Is it a carnivore?",
+        "left": "Pidgeon",
+        "right": "Eagle"
+      }
+    },
+    "right": {
+      "value": "Is it a mammal?",
+      "left": "Ant",
+      "right": {
+        "value": "Is it domesticated?",
+        "left": {
+            "value": "Is it a herbivore?",
+            "left": {
+                "value": "Does it have spots?",
+                "left": "Lion",
+                "right": "Cheetah"
+              },
+            "right": "Elephant" 
+          },
+        "right": {
+            "value": "Does it have hair? (not fur!)",
+            "left": {
+                "value": "Does it eat cat food?",
+                "left": "Dog",
+                "right": "Cat"
+            },
+            "right": "Horse"
+        }
+      }
+    }
+}
+  
