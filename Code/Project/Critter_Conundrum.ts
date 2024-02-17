@@ -1,5 +1,5 @@
 import { List, head, list, is_null, tail, append } from '../lib/list'
-import * as BinaryTreeData from './test.json';
+import * as BinaryTreeData from './animal_data.json';
 
 //to run: tsc Critter_Conundrum.ts --resolveJsonModule && node Critter_Conundrum.js
 
@@ -38,16 +38,22 @@ function edit_in_tree(path: List<string>, tree: Tree, new_input: nonEmptyTree): 
 		return "error: incorrect list format";
 	}
 }
+/**
+ * 
+ * @param question 
+ * @param old_animal 
+ * @param new_animal 
+ * @param path 
+ */
 function add_new_animal(question: string, old_animal: string, new_animal: string, path: List<string>): void {
 	const fs = require('fs');
-	const fileName = './test.json';
+	const fileName = './animal_data.json';
 	let file = require(fileName);
 		
 	file = edit_in_tree(path, BinaryTreeData, {value: question, left: old_animal, right: new_animal});
 		
 	fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
 	  if (err) return console.log(err);
-	  console.log(JSON.stringify(file, null, 2));
 	  console.log('writing to ' + fileName);
 	});
 }
@@ -109,13 +115,11 @@ function game_turn(tree: Tree): void {
 		if(userInput === "y"){
 			readline.close();
 			path_to_animal = append(path_to_animal, list("right"));
-			console.log(path_to_animal);
 			turns++;
 			game_turn(tree.right);
 		} else if(userInput === "n" ){
 			readline.close();
 			path_to_animal = append(path_to_animal, list("left"));
-			console.log(path_to_animal);
 			turns++;
 			game_turn(tree.left);
 		} else {
