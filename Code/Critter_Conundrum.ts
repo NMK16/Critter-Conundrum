@@ -7,9 +7,8 @@ type Leaf = string;
 type Tree = {value: string, left: Tree, right: Tree} | Leaf;
 type nonEmptyTree = {value: string, left: Tree, right: Tree};
 
-/** Allows us to edit the value of a leaf
- *  in our binary tree
- * 
+/** Allows editing the value of a leaf
+ *  in the binary tree
  * @param path 
  * @param tree 
  * @param new_input 
@@ -20,27 +19,27 @@ function edit_in_tree(path: List<string>, tree: Tree, new_input: nonEmptyTree): 
 		return new_input;
 	} else if(head(path) === "right") {
 		if(typeof(tree) === "string") { 
-      console.log("error: premature leaf found");
+      		console.log("error: premature leaf found");
 			return "error";
 		} else {
 			return {value: tree.value, 
-              left: tree.left, 
-              right: edit_in_tree(tail(path), tree.right, new_input)};
+            		left: tree.left, 
+            		right: edit_in_tree(tail(path), tree.right, new_input)};
 		}
 	} else if(head(path) === "left") {
 		if(typeof(tree) === "string") {
-      console.log("error: premature leaf found");
+      		console.log("error: premature leaf found");
 			return "error";
 		} else {
 			return {value: tree.value, 
-              left: edit_in_tree(tail(path), tree.left, new_input), 
-              right: tree.right};
+            		left: edit_in_tree(tail(path), tree.left, new_input), 
+            		right: tree.right};
 		}
 	} else {
 		return "error: incorrect list format";
 	}
 }
-/** Adds a new animal to our json file.	
+/** Adds a new animal to the json file.	
  * @param question 
  * @param old_animal 
  * @param new_animal 
@@ -54,12 +53,11 @@ function add_new_animal(question: string, old_animal: string, new_animal: string
 	file = edit_in_tree(path, BinaryTreeData, {value: question, left: old_animal, right: new_animal});
 		
 	fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-	  if (err) return console.log(err);
-	  console.log('writing to ' + fileName);
+		if (err) return console.log(err);
+		console.log('writing to ' + fileName);
 	});
 }
 /** Allows you to go back a step.
- * Precondition: You have done an action before.
  * @param tree 
  */
 function go_back(tree: Tree): void {
@@ -68,9 +66,9 @@ function go_back(tree: Tree): void {
 		path_to_animal = tail(path_to_animal!);
 		game_turn(top(game_history));
 		game_history = pop(game_history);
-	}else {
-	  console.log("You haven't made a move to undo yet.");
-	  game_turn(tree);
+	} else {
+		console.log("You haven't made a move to undo yet.");
+		game_turn(tree);
 	}
 }
 let path_to_animal: List<string> = list();
