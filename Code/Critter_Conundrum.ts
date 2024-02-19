@@ -1,6 +1,6 @@
 import * as BinaryTreeData from './animal_data.json';
-import {List, head, list, is_null, tail, append } from '../lib/list'
-import {Stack, pop, top, empty, push, is_empty,} from '../lib/stack'
+import {List, head, list, is_null, tail, append } from './../lib/list'
+import {Stack, pop, top, empty, push, is_empty,} from './../lib/stack'
 //to run: tsc Critter_Conundrum.ts --resolveJsonModule && node Critter_Conundrum.js (for linux)
 
 type Leaf = string;
