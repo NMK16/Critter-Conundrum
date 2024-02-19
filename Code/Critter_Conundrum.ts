@@ -7,7 +7,8 @@ type Leaf = string;
 type Tree = {value: string, left: Tree, right: Tree} | Leaf;
 type nonEmptyTree = {value: string, left: Tree, right: Tree};
 
-/**
+/** Allows us to edit the value of a leaf
+ *  in our binary tree
  * 
  * @param path 
  * @param tree 
@@ -39,8 +40,7 @@ function edit_in_tree(path: List<string>, tree: Tree, new_input: nonEmptyTree): 
 		return "error: incorrect list format";
 	}
 }
-/**
- * 
+/** Adds a new animal to our json file.	
  * @param question 
  * @param old_animal 
  * @param new_animal 
@@ -58,13 +58,14 @@ function add_new_animal(question: string, old_animal: string, new_animal: string
 	  console.log('writing to ' + fileName);
 	});
 }
-/**
- * 
+/** Allows you to go back a step.
+ * Precondition: You have done an action before.
  * @param tree 
  */
 function go_back(tree: Tree): void {
 	if (!is_empty(game_history)){
 		turns--;
+		path_to_animal = tail(path_to_animal!);
 		game_turn(top(game_history));
 		game_history = pop(game_history);
 	}else {
@@ -90,7 +91,7 @@ function game_turn(tree: Tree): void {
 			readline.close();
 			if(userInput === "y") {
 				console.log("I'm the best! I guessed your animal in " + turns + " questions!")
-			} else if (userInput === "n"){
+			} else if (userInput === "n") {
 				//fill json file with new animal
 				let userInput_animal: string = "";
 				let userInput_question: string = "";
