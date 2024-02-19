@@ -1,7 +1,7 @@
 import * as BinaryTreeData from './animal_data.json';
 import {List, head, list, is_null, tail, append } from './lib/list'
-import {Stack, pop, top, empty, push, NonEmptyStack, is_empty,} from './lib/stack'
-//to run: tsc Critter_Conundrum.ts --resolveJsonModule && node Critter_Conundrum.js
+import {Stack, pop, top, empty, push, is_empty,} from './lib/stack'
+//to run: tsc Critter_Conundrum.ts --resolveJsonModule && node Critter_Conundrum.js (for linux)
 
 type Leaf = string;
 type Tree = {value: string, left: Tree, right: Tree} | Leaf;
@@ -126,7 +126,7 @@ function game_turn(tree: Tree): void {
 			input: process.stdin,
 			output: process.stdout
 		});
-		readline.question(tree.value + " (y/n) -> ", userInput  => {
+		readline.question(tree.value + " (y/n/b) -> ", userInput  => {
 		if(userInput === "y"){
 			readline.close();
 			path_to_animal = append(path_to_animal, list("right"));
@@ -143,7 +143,7 @@ function game_turn(tree: Tree): void {
 			readline.close();
 			go_back(tree);
 		} else {
-			console.log("Wrong input");
+			console.log("Wrong input.");
 			readline.close();
 			game_turn(tree);
 			}
