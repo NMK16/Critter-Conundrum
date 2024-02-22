@@ -7,26 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        <div id="text-boxDiv">
-            <label id="text-box">Think of an animal. I will guess it!</label>
-        </div>
+    <div id="text-boxDiv">
+        <label id="text-box">Think of an animal. I will guess it!</label>
+    </div>
     <div id="text-input-div">
-            <textarea id="text-input"></textarea>
-            <button onclick="submitButton();">submit</button>
+        <textarea id="text-input"></textarea>
+        <button id="buttonSubmit" onclick="submit_button();">Submit</button>
+        <button id="buttonDownload" onclick="download_json();">Download Json</button>
     </div>
     <div id="buttonDiv">
-        <button id="buttonYes" onclick="yesButton();">Yes</button>    
-        <button id="buttonNo" onclick="noButton();">No</button>       
+        <button id="buttonYes" onclick="yes_button();">Yes</button>    
+        <button id="buttonNo" onclick="no_button();">No</button>       
     </div>
     <div id="backDiv">
-        <button id="buttonBack" onclick="backButton();">Back</button>
+        <button id="buttonBack" onclick="back_button();">Back</button>
     </div>
     <div id="startDiv">
         <button id="buttonStart" onclick="start();">Start New Game</button>
     </div>
-   
-
-
 </body>
 
 

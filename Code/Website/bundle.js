@@ -5,13 +5,16 @@ const BinaryTreeData = require("./../animal_data.json");
 const list_1 = require("./../../lib/list");
 const stack_1 = require("./../../lib/stack");
 //Global variables
+let tree_state_saved = BinaryTreeData;
 let path_to_animal;
-;
 let turns = 0;
 let game_history;
 let tree_state;
 let userInput = "start";
 let game_started = false;
+let submitQuestion = "start";
+let new_animal = "";
+let new_question = "";
 /** Allows editing the value of a leaf
  *  in the binary tree.
  * @param path_to_animal - List containing directions to desired leaf.
@@ -51,23 +54,6 @@ function edit_in_tree(path_to_animal, tree, new_input) {
         return "error: incorrect list format";
     }
 }
-/** Adds a new animal and question to the JSON file.
- * @param question - User added question.
- * @param old_animal - Animal to be moved to left branch of new node.
- * @param new_animal - Animal to be moved to right branch of new node.
- * @param path_to_animal - List containing directions to desired leaf.
- */
-function write_to_json(question, old_animal, new_animal, path_to_animal) {
-    const fs = require('fs');
-    const fileName = './../animal_data.json';
-    let file = require(fileName);
-    file = edit_in_tree(path_to_animal, BinaryTreeData, { value: question, left: old_animal, right: new_animal });
-    fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-        if (err)
-            return console.log(err);
-        console.log('writing to ' + fileName);
-    });
-}
 /** Asks user what animal they were thinking of and a question to distinguish
  * that animal and the old.
  * @param tree - Binary tree with nodes representing questions and leaves
@@ -75,13 +61,11 @@ function write_to_json(question, old_animal, new_animal, path_to_animal) {
  * @param path_to_animal - List containing directions to desired leaf.
  */
 function add_new_animal(tree, path_to_animal) {
+    submitQuestion = "animal";
     new_animal_html();
-    let userInput_animal = "";
-    let userInput_question = "";
     console.log("Sorry but it seems that I don't know your animal.");
     console.log("What animal were you thinking of? -> ");
     display("Sorry but it seems that I don't know your animal. <br/>What animal were you thinking of?");
-    //write_to_json(userInput_question, tree, userInput_animal, path_to_animal);
 }
 /** Allows you to go back a step by running game_turn on top of game_history
  * stack.
@@ -183,55 +167,128 @@ function log_tree_value() {
     }
 }
 //Website functions
+/**
+ *
+ */
 function start() {
+    submitQuestion = "start";
+    turns = 0;
+    tree_state = tree_state_saved;
     document.getElementById("text-input-div").style.opacity = "0";
     path_to_animal = (0, list_1.list)();
     game_history = (0, stack_1.empty)();
-    tree_state = BinaryTreeData;
     log_tree_value();
     game_started = true;
 }
 window.start = start;
-function yesButton() {
+/**
+ *
+ */
+function yes_button() {
     if (game_started) {
         userInput = "y";
         game_turn();
     }
 }
-window.yesButton = yesButton;
-function noButton() {
+window.yes_button = yes_button;
+/**
+ *
+ */
+function no_button() {
     if (game_started) {
         userInput = "n";
         game_turn();
     }
 }
-window.noButton = noButton;
-function backButton() {
+window.no_button = no_button;
+/**
+ *
+ */
+function back_button() {
     if (game_started) {
         userInput = "b";
         game_turn();
     }
 }
-window.backButton = backButton;
+window.back_button = back_button;
+/**
+ *
+ */
 function clear_text_area() {
     const textInput = document.getElementById("text-input");
     textInput.value = "";
 }
+/**
+ *
+ */
 function new_animal_html() {
     clear_text_area();
     document.getElementById("text-input-div").style.opacity = "1";
 }
-function submitButton() {
+/**
+ *
+ * @returns
+ */
+function read_text_box() {
     const textInput = document.getElementById("text-input");
-    const new_animal = textInput.value;
-    clear_text_area();
-    display("Give me a question that separates " +
-        new_animal + " from " + tree_state + ". <br/>Please make it as broad as possible," +
-        " where your animal has the answer yes.");
+    return textInput.value;
 }
-window.submitButton = submitButton;
+/**
+ *
+ */
+function submit_button() {
+    if (submitQuestion === "animal") {
+        new_animal = read_text_box();
+        clear_text_area();
+        display("Give me a question that separates " +
+            new_animal + " from " + tree_state + ". <br/>Please make it as broad as possible," +
+            " where your animal has the answer yes.");
+        submitQuestion = "question";
+    }
+    else if (submitQuestion === "question") {
+        new_question = read_text_box();
+        clear_text_area();
+        submitQuestion = "start";
+        display("Thank you, " + new_animal + " has been added successfully!");
+        tree_state_saved = edit_in_tree(path_to_animal, tree_state_saved, { value: new_question,
+            left: tree_state,
+            right: new_animal });
+    }
+}
+window.submit_button = submit_button;
+/**
+ *
+ * @param data
+ * @param filename
+ */
+function downloadJSONFile(data, filename) {
+    // Convert data to JSON string
+    const jsonData = JSON.stringify(data, null, 2);
+    // Create a Blob object from the JSON string
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    // Create a temporary URL for the Blob
+    const url = URL.createObjectURL(blob);
+    // Create a temporary anchor element
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename; // Set the download attribute with the filename
+    a.click();
+    // Release the object URL
+    URL.revokeObjectURL(url);
+}
+/**
+ *
+ */
+function download_json() {
+    if (new_animal !== "" && new_question !== "") {
+        downloadJSONFile(tree_state_saved, "animal_data.json");
+    }
+    new_animal = "";
+    new_question = "";
+}
+window.download_json = download_json;
 
-},{"./../../lib/list":3,"./../../lib/stack":4,"./../animal_data.json":2,"fs":5}],2:[function(require,module,exports){
+},{"./../../lib/list":3,"./../../lib/stack":4,"./../animal_data.json":2}],2:[function(require,module,exports){
 module.exports={
   "value": "Does it live on land?",
   "left": {
@@ -741,6 +798,4 @@ function display_stack(stck) {
 }
 exports.display_stack = display_stack;
 
-},{"./list":3}],5:[function(require,module,exports){
-
-},{}]},{},[1]);
+},{"./list":3}]},{},[1]);

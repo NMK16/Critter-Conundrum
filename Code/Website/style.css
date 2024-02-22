@@ -156,3 +156,9 @@ body {
     width: 200px;
     height: 100px;
 }
+#buttonDownload {
+    color: black;
+}
+#buttonSubmit {
+    color: black;
+}
