@@ -1,16 +1,16 @@
-h1{
+h1 {
     text-align: center;
     color: white;
 }
-#backDiv{
+#backDiv {
     margin-top: 5px;
     text-align: center;
 }
-#startDiv{
+#startDiv {
     margin-top: 5px;
     text-align: center;
 }
-#buttonStart{
+#buttonStart {
     outline: 0;
     grid-gap: 8px;
     align-items: center;
@@ -32,7 +32,7 @@ h1{
     transition: all .14s ease-out;
     white-space: nowrap;   
 }
-#buttonYes{
+#buttonYes {
     outline: 0;
     grid-gap: 8px;
     align-items: center;
@@ -54,7 +54,7 @@ h1{
     transition: all .14s ease-out;
     white-space: nowrap;
 }
-#buttonBack{
+#buttonBack {
     outline: 0;
     grid-gap: 8px;
     align-items: center;
@@ -76,7 +76,7 @@ h1{
     transition: all .14s ease-out;
     white-space: nowrap;
 }
-#buttonNo{
+#buttonNo {
     outline: 0;
     grid-gap: 8px;
     align-items: center;
@@ -98,8 +98,8 @@ h1{
     transition: all .14s ease-out;
     white-space: nowrap;
 }
-#buttonDiv{
-    margin-top: 220px;
+#buttonDiv {
+    margin-top: 80px;
     text-align: center;
 }
 #buttonNo:hover {
@@ -110,70 +110,49 @@ h1{
     box-shadow: 4px 4px 0 #000;
     transform: translate(-4px,-4px);
 }
-#buttonYes:focus-visible{
+#buttonYes:focus-visible {
     outline-offset: 1px;
 }
-#buttonNo:focus-visible{
+#buttonNo:focus-visible {
     outline-offset: 1px;
 }
 #buttonBack:hover {
     box-shadow: 4px 4px 0 #000;
     transform: translate(-4px,-4px);
 }
-#buttonBack:focus-visible{
+#buttonBack:focus-visible {
     outline-offset: 1px;
 }
 #buttonStart:hover {
     box-shadow: 4px 4px 0 #000;
     transform: translate(-4px,-4px);
 }
-#buttonStart:focus-visible{
+#buttonStart:focus-visible {
     outline-offset: 1px;
 }
-
 #text-box {
     text-align: center;
     color: white;
-    background-color: black;
-    padding: 50px;
-    border-radius: 10px;
 }
 #text-boxDiv {
+    margin: auto;
+    width: 50%;
+    width: 50%;
+    padding: 50px;
+    background-color: black;
     margin-top: 80px;
     text-align: center;
+    border-radius: 10px;
 }
 body {
     background-image: url('./pictures/jungle.jpg');
 }
-/*
-
-                    outline: 0;
-                    grid-gap: 8px;
-                    align-items: center;
-                    background-color: #ff90e8;
-                    color: #000;
-                    border: 1px solid #000;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    display: inline-flex;
-                    flex-shrink: 0;
-                    font-size: 16px;
-                    gap: 8px;
-                    justify-content: center;
-                    line-height: 1.5;
-                    overflow: hidden;
-                    padding: 12px 16px;
-                    text-decoration: none;
-                    text-overflow: ellipsis;
-                    transition: all .14s ease-out;
-                    white-space: nowrap;
-                    :hover {
-                        box-shadow: 4px 4px 0 #000;
-                        transform: translate(-4px,-4px);
-                    }
-                    :focus-visible{
-                        outline-offset: 1px;
-                    }
-                
-
-*/
+#text-input-div {
+    margin-top: 5px;
+    text-align: center;
+    opacity: 0;
+}
+#text-input {
+    width: 200px;
+    height: 100px;
+}

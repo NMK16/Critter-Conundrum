@@ -5,11 +5,13 @@ const BinaryTreeData = require("./../animal_data.json");
 const list_1 = require("./../../lib/list");
 const stack_1 = require("./../../lib/stack");
 //Global variables
-let path_to_animal = (0, list_1.list)();
+let path_to_animal;
+;
 let turns = 0;
-let game_history = (0, stack_1.empty)();
+let game_history;
 let tree_state;
 let userInput = "start";
+let game_started = false;
 /** Allows editing the value of a leaf
  *  in the binary tree.
  * @param path_to_animal - List containing directions to desired leaf.
@@ -73,18 +75,12 @@ function write_to_json(question, old_animal, new_animal, path_to_animal) {
  * @param path_to_animal - List containing directions to desired leaf.
  */
 function add_new_animal(tree, path_to_animal) {
+    new_animal_html();
     let userInput_animal = "";
     let userInput_question = "";
     console.log("Sorry but it seems that I don't know your animal.");
-    const userInput = "";
     console.log("What animal were you thinking of? -> ");
-    userInput_animal = userInput;
-    console.log("Give me a question that separates " +
-        userInput_animal + " from " + tree + ".");
-    const userInput2 = "";
-    console.log("Please make it as broad as possible," +
-        " where your animal has the answer yes. -> ");
-    userInput_question = userInput2;
+    display("Sorry but it seems that I don't know your animal. <br/>What animal were you thinking of?");
     //write_to_json(userInput_question, tree, userInput_animal, path_to_animal);
 }
 /** Allows you to go back a step by running game_turn on top of game_history
@@ -92,17 +88,17 @@ function add_new_animal(tree, path_to_animal) {
  * @param tree - Binary tree with nodes representing questions and leaves
  * representing animals.
  */
-function go_back(tree) {
-    userInput = "_";
+function go_back() {
     if (!(0, stack_1.is_empty)(game_history)) {
         turns--;
         path_to_animal = (0, list_1.tail)(path_to_animal);
-        game_turn((0, stack_1.top)(game_history));
+        tree_state = (0, stack_1.top)(game_history);
         game_history = (0, stack_1.pop)(game_history);
     }
     else {
         console.log("You haven't made a move to undo yet.");
     }
+    log_tree_value();
 }
 /** Traverses either to right or left branch of binary tree.
  * @param answer - Either "left" or "right"
@@ -111,39 +107,37 @@ function go_back(tree) {
  * @param new_branch Either left or right branch of tree.
  */
 function go_left_or_right(answer, tree, new_branch) {
+    tree_state = new_branch;
     path_to_animal = (0, list_1.append)(path_to_animal, (0, list_1.list)(answer));
     turns++;
     game_history = (0, stack_1.push)(tree, game_history);
-    game_turn(new_branch);
 }
 /** Inquires if users animal has been reached.
  * 	If not, runs add_new_animal function.
  * @param tree - Leaf containing an animal.
  */
 function process_leaf(tree) {
-    console.log("Are you thinking of a " + tree + " (y/n/b) -> ");
     if (userInput === "y") {
+        game_started = false;
         console.log("I'm the best! I guessed your animal in " + turns +
             " questions!");
+        display("I'm the best! I guessed your animal (" + tree + ") in " +
+            turns + " questions!");
     }
     else if (userInput === "n") {
+        game_started = false;
         //fill json file with new animal
         add_new_animal(tree, path_to_animal);
     }
     else if (userInput === "b") {
-        go_back(tree);
+        go_back();
     }
-    else {
-        console.log("Wrong input");
-    }
-    userInput = "_";
 }
 /** Requests user what move they want to make between yes, no or back.
  * @param tree - Binary tree with nodes representing questions and leaves
  * representing animals.
  */
 function process_node(tree) {
-    console.log(tree.value + " (y/n/b) -> ");
     if (userInput === "y") {
         go_left_or_right("right", tree, tree.right);
     }
@@ -151,47 +145,91 @@ function process_node(tree) {
         go_left_or_right("left", tree, tree.left);
     }
     else if (userInput === "b") {
-        go_back(tree);
+        go_back();
     }
-    userInput = "_";
+    log_tree_value();
 }
 /** Determines if a leaf or node has been reached and runs appropriate function.
  * Each function call represents a game turn.
  * @param tree - Binary tree with nodes representing questions and leaves
  * representing animals.
  */
-function game_turn(tree) {
-    tree_state = tree;
-    if (userInput !== "_") {
-        if (typeof (tree) === "string") {
-            process_leaf(tree);
-        }
-        else {
-            process_node(tree);
-        }
+function game_turn() {
+    if (typeof (tree_state) === "string") {
+        process_leaf(tree_state);
+    }
+    else {
+        process_node(tree_state);
+    }
+}
+/**
+ *
+ * @param message
+ */
+function display(message) {
+    document.getElementById("text-box").innerHTML = message;
+}
+/**
+ *
+ */
+function log_tree_value() {
+    if (typeof (tree_state) !== "string") {
+        console.log(tree_state.value + " (y/n/b) -> ");
+        display(tree_state.value);
+    }
+    else {
+        console.log("Are you thinking of a " + tree_state + " (y/n/b) -> ");
+        display("Are you thinking of a " + tree_state + "?");
     }
 }
 //Website functions
 function start() {
-    document.getElementById("text-box").innerHTML = "Think of an animal. I will guess it!";
-    game_turn(BinaryTreeData);
+    document.getElementById("text-input-div").style.opacity = "0";
+    path_to_animal = (0, list_1.list)();
+    game_history = (0, stack_1.empty)();
+    tree_state = BinaryTreeData;
+    log_tree_value();
+    game_started = true;
 }
 window.start = start;
 function yesButton() {
-    userInput = "y";
-    game_turn(tree_state);
+    if (game_started) {
+        userInput = "y";
+        game_turn();
+    }
 }
 window.yesButton = yesButton;
 function noButton() {
-    userInput = "n";
-    game_turn(tree_state);
+    if (game_started) {
+        userInput = "n";
+        game_turn();
+    }
 }
 window.noButton = noButton;
 function backButton() {
-    userInput = "b";
-    game_turn(tree_state);
+    if (game_started) {
+        userInput = "b";
+        game_turn();
+    }
 }
 window.backButton = backButton;
+function clear_text_area() {
+    const textInput = document.getElementById("text-input");
+    textInput.value = "";
+}
+function new_animal_html() {
+    clear_text_area();
+    document.getElementById("text-input-div").style.opacity = "1";
+}
+function submitButton() {
+    const textInput = document.getElementById("text-input");
+    const new_animal = textInput.value;
+    clear_text_area();
+    display("Give me a question that separates " +
+        new_animal + " from " + tree_state + ". <br/>Please make it as broad as possible," +
+        " where your animal has the answer yes.");
+}
+window.submitButton = submitButton;
 
 },{"./../../lib/list":3,"./../../lib/stack":4,"./../animal_data.json":2,"fs":5}],2:[function(require,module,exports){
 module.exports={
