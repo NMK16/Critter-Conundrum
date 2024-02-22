@@ -1,12 +1,12 @@
 import * as BinaryTreeData from './animal_data.json';
-import {List, head, list, is_null, tail, append } from './../lib/list'
-import {Stack, pop, top, empty, push, is_empty,} from './../lib/stack'
+import { List, head, list, is_null, tail, append } from './../lib/list'
+import { Stack, pop, top, empty, push, is_empty } from './../lib/stack'
 //to run: tsc Critter_Conundrum.ts --resolveJsonModule && node Critter_Conundrum.js (for linux)
 
 //Global types
-type Leaf = string;
-type Tree = {value: string, left: Tree, right: Tree} | Leaf;
-type nonEmptyTree = {value: string, left: Tree, right: Tree};
+export type Leaf = string;
+export type Tree = {value: string, left: Tree, right: Tree} | Leaf;
+export type nonEmptyTree = {value: string, left: Tree, right: Tree};
 
 //Global variables
 let path_to_animal: List<string> = list();
@@ -19,9 +19,12 @@ let game_history: Stack<Tree> = empty();
  * @param tree - Binary tree with nodes representing questions and leaves 
  * representing animals.
  * @param new_input - New binary tree to replace a leaf in main binary tree.
- * @returns Returns a copy of animal_data.json where the leaf at path is replaced with the new_input tree.
+ * @returns Returns a copy of animal_data.json where the leaf at path is 
+ * replaced with the new_input tree.
  */
-function edit_in_tree(path_to_animal: List<string>, tree: Tree, new_input: nonEmptyTree): Tree {
+export function edit_in_tree(path_to_animal: List<string>, 
+							 tree: Tree, 
+							 new_input: nonEmptyTree): Tree {
 	if(is_null(path_to_animal)) {
 		return new_input;
 	} else if(head(path_to_animal) === "right") {
@@ -31,7 +34,9 @@ function edit_in_tree(path_to_animal: List<string>, tree: Tree, new_input: nonEm
 		} else {
 			return {value: tree.value, 
             		left: tree.left, 
-            		right: edit_in_tree(tail(path_to_animal), tree.right, new_input)};
+            		right: edit_in_tree(tail(path_to_animal), 
+										tree.right, 
+										new_input)};
 		}
 	} else if(head(path_to_animal) === "left") {
 		if(typeof(tree) === "string") {
@@ -39,7 +44,9 @@ function edit_in_tree(path_to_animal: List<string>, tree: Tree, new_input: nonEm
 			return "error";
 		} else {
 			return {value: tree.value, 
-            		left: edit_in_tree(tail(path_to_animal), tree.left, new_input), 
+            		left: edit_in_tree(tail(path_to_animal), 
+									   tree.left, 
+									   new_input), 
             		right: tree.right};
 		}
 	} else {
@@ -53,14 +60,17 @@ function edit_in_tree(path_to_animal: List<string>, tree: Tree, new_input: nonEm
  * @param new_animal - Animal to be moved to right branch of new node.
  * @param path_to_animal - List containing directions to desired leaf.
  */
-function write_to_json(question: string, old_animal: string, new_animal: string, path_to_animal: List<string>): void {
+function write_to_json(question: string, old_animal: string, 
+					   new_animal: string, path_to_animal: List<string>): void {
 	const fs = require('fs');
 	const fileName = './animal_data.json';
 	let file = require(fileName);
 		
-	file = edit_in_tree(path_to_animal, BinaryTreeData, {value: question, left: old_animal, right: new_animal});
+	file = edit_in_tree(path_to_animal, BinaryTreeData, 
+						{value: question, left: old_animal, right: new_animal});
 		
-	fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err: string) {
+	fs.writeFile(fileName, JSON.stringify(file, null, 2), 
+				 function writeJSON(err: string) {
 		if (err) return console.log(err);
 		console.log('writing to ' + fileName);
 	});
@@ -72,7 +82,8 @@ function write_to_json(question: string, old_animal: string, new_animal: string,
  * representing animals.
  * @param path_to_animal - List containing directions to desired leaf.
  */
-function add_new_animal(tree: string, path_to_animal: List<string>): void {
+export function add_new_animal(tree: string, 
+							   path_to_animal: List<string>): void {
 	let userInput_animal: string = "";
 	let userInput_question: string = "";
 	const readline2 = require('readline').createInterface({
@@ -80,7 +91,8 @@ function add_new_animal(tree: string, path_to_animal: List<string>): void {
 		output: process.stdout
 	});
 	console.log("Sorry but it seems that I don't know your animal.");
-	readline2.question("What animal were you thinking of? -> ", (userInput: string)  => {
+	readline2.question("What animal were you thinking of? -> ", 
+					   (userInput: string)  => {
 		userInput_animal = userInput;
 		readline2.close();
 	
@@ -88,11 +100,15 @@ function add_new_animal(tree: string, path_to_animal: List<string>): void {
 			input: process.stdin,
 			output: process.stdout
 		});
-		console.log("Give me a question that separates " + userInput_animal + " from " + tree + ".");
-		readline3.question("Please make it as broad as possible, where your animal has the answer yes. -> ", (userInput: string)  => {
+		console.log("Give me a question that separates " + 
+					userInput_animal + " from " + tree + ".");
+		readline3.question("Please make it as broad as possible," + 
+						   " where your animal has the answer yes. -> ", 
+						   (userInput: string)  => {
 			userInput_question = userInput;
 			readline3.close();
-			write_to_json(userInput_question, tree, userInput_animal, path_to_animal);
+			write_to_json(userInput_question, tree, 
+						  userInput_animal, path_to_animal);
 		});});
 }
 
@@ -101,7 +117,7 @@ function add_new_animal(tree: string, path_to_animal: List<string>): void {
  * @param tree - Binary tree with nodes representing questions and leaves 
  * representing animals.
  */
-function go_back(tree: Tree): void {
+export function go_back(tree: Tree): void {
 	if (!is_empty(game_history)){
 		turns--;
 		path_to_animal = tail(path_to_animal!);
@@ -119,25 +135,29 @@ function go_back(tree: Tree): void {
  * representing animals.
  * @param new_branch Either left or right branch of tree.
  */
-function go_left_or_right(answer: string, tree: nonEmptyTree, new_branch: Tree): void {
+export function go_left_or_right(answer: string, tree: nonEmptyTree, 
+							     new_branch: Tree): void {
 	path_to_animal = append(path_to_animal, list(answer));
 	turns++;
 	game_history = push(tree, game_history);
 	game_turn(new_branch);
 }
 
-/** Inquires if users animal has been reached. If not, runs add_new_animal function.
+/** Inquires if users animal has been reached. 
+ * 	If not, runs add_new_animal function.
  * @param tree - Leaf containing an animal.
  */
-function process_leaf(tree: string): void {
+export function process_leaf(tree: string): void {
 	const readline = require('readline').createInterface({
 		input: process.stdin,
 		output: process.stdout
 	});
-	readline.question("Are you thinking of a " + tree + " (y/n/b) -> ", (userInput: string)  => {
+	readline.question("Are you thinking of a " + tree + " (y/n/b) -> ", 
+					  (userInput: string)  => {
 		readline.close();
 		if(userInput === "y") {
-			console.log("I'm the best! I guessed your animal in " + turns + " questions!")
+			console.log("I'm the best! I guessed your animal in " + turns + 
+						" questions!")
 		} else if (userInput === "n") {
 			//fill json file with new animal
 			add_new_animal(tree, path_to_animal);
@@ -154,7 +174,7 @@ function process_leaf(tree: string): void {
  * @param tree - Binary tree with nodes representing questions and leaves 
  * representing animals.
  */
-function process_node(tree: nonEmptyTree): void {
+export function process_node(tree: nonEmptyTree): void {
 	const readline = require('readline').createInterface({
 		input: process.stdin,
 		output: process.stdout
@@ -182,7 +202,7 @@ function process_node(tree: nonEmptyTree): void {
  * @param tree - Binary tree with nodes representing questions and leaves 
  * representing animals.
  */
-function game_turn(tree: Tree): void {
+export function game_turn(tree: Tree): void {
 	if(typeof(tree) === "string") {
 		process_leaf(tree);
 	} else {
