@@ -21,7 +21,11 @@
     "value": "Is it a mammal?",
     "left": {
       "value": "Is it a reptile?",
-      "left": "Ant",
+      "left": {
+        "value": "Is it a bird?",
+        "left": "Ant",
+        "right": "Chicken"
+      },
       "right": "Snake"
     },
     "right": {
@@ -33,7 +37,15 @@
           "left": {
             "value": "Does your animal exist in northern nature?",
             "left": "Lion",
-            "right": "Bear"
+            "right": {
+              "value": "Is it bipedal?",
+              "left": {
+                "value": "Does it have white fur?",
+                "left": "Bear",
+                "right": "Polar bear"
+              },
+              "right": "Human"
+            }
           },
           "right": "Cheetah"
         },
@@ -43,10 +55,22 @@
         "value": "Does it have hair? (not fur!)",
         "left": {
           "value": "Does it eat cat food?",
-          "left": "Dog",
+          "left": {
+            "value": "Is your animal an herbivore?",
+            "left": "Dog",
+            "right": "Bunny"
+          },
           "right": "Cat"
         },
-        "right": "Horse"
+        "right": {
+          "value": "Is it livestock?",
+          "left": "Horse",
+          "right": {
+            "value": "Does it have a curly tail?",
+            "left": "Cow",
+            "right": "Pig"
+          }
+        }
       }
     }
   }
