@@ -1,6 +1,14 @@
 h1 {
     text-align: center;
     color: white;
+    /*background-color: #2b3a51;*/
+    border-radius: 10px;
+    width: fit-content;
+    margin: auto;
+    /* border: solid green 1px; */
+    padding: 3px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    text-shadow: 1px 1px 2px rgb(251, 255, 0), 0 0 25px darkcyan, 0 0 5px gold;
 }
 #backDiv {
     margin-top: 5px;
@@ -132,20 +140,27 @@ h1 {
 }
 #text-box {
     text-align: center;
-    color: white;
+    color: black;
+
 }
 #text-boxDiv {
     margin: auto;
     width: 50%;
     width: 50%;
     padding: 50px;
-    background-color: black;
+    /* background-image: url('./pictures/iron5.jpg'); */
+    background-color: lightblue;
+    background-size: 600px;
+    border: solid black 1px;
     margin-top: 80px;
     text-align: center;
     border-radius: 10px;
 }
 body {
-    background-image: url('./pictures/jungle.jpg');
+    background-image: url('./pictures/house.png');
+    background-color: greenyellow;
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 #text-input-div {
     margin-top: 5px;
@@ -155,10 +170,71 @@ body {
 #text-input {
     width: 200px;
     height: 100px;
+    cursor: default;
 }
-#buttonDownload {
-    color: black;
+#buttonCol {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: auto;
 }
 #buttonSubmit {
-    color: black;
+    margin-top: 5px;
+    outline: 0;
+    grid-gap: 8px;
+    align-items: center;
+    background-color: #7744b1;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 4px;
+    cursor: default;
+    display: inline-flex;
+    flex-shrink: 0;
+    font-size: 16px;
+    gap: 8px;
+    justify-content: center;
+    line-height: 1.5;
+    overflow: hidden;
+    padding: 3px 4px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    transition: all .14s ease-out;
+    white-space: nowrap;
+}
+#buttonSubmit:hover {
+    box-shadow: 4px 4px 0 #000;
+    transform: translate(-4px,-4px);
+}
+#buttonSubmit:focus-visible {
+    outline-offset: 1px;
+}
+#buttonDownload {
+    margin-top: 5px;
+    outline: 0;
+    grid-gap: 8px;
+    align-items: center;
+    background-color: #7744b1;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 4px;
+    cursor: default;
+    display: inline-flex;
+    flex-shrink: 0;
+    font-size: 16px;
+    gap: 8px;
+    justify-content: center;
+    line-height: 1.5;
+    overflow: hidden;
+    padding: 3px 4px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    transition: all .14s ease-out;
+    white-space: nowrap;
+}
+#buttonDownload:hover {
+    box-shadow: 4px 4px 0 #000;
+    transform: translate(-4px,-4px);
+}
+#buttonDownload:focus-visible {
+    outline-offset: 1px;
 }

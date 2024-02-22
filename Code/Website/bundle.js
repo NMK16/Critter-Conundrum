@@ -171,10 +171,12 @@ function log_tree_value() {
  *
  */
 function start() {
+    hide_element("buttonSubmit");
+    hide_element("buttonDownload");
     submitQuestion = "start";
     turns = 0;
     tree_state = tree_state_saved;
-    document.getElementById("text-input-div").style.opacity = "0";
+    hide_element("text-input");
     path_to_animal = (0, list_1.list)();
     game_history = (0, stack_1.empty)();
     log_tree_value();
@@ -223,7 +225,10 @@ function clear_text_area() {
  */
 function new_animal_html() {
     clear_text_area();
-    document.getElementById("text-input-div").style.opacity = "1";
+    show_element("buttonSubmit");
+    show_element("text-input");
+    show_element("text-input-div");
+    hide_element("buttonDownload");
 }
 /**
  *
@@ -240,6 +245,7 @@ function submit_button() {
     if (submitQuestion === "animal") {
         new_animal = read_text_box();
         clear_text_area();
+        show_element("buttonSubmit");
         display("Give me a question that separates " +
             new_animal + " from " + tree_state + ". <br/>Please make it as broad as possible," +
             " where your animal has the answer yes.");
@@ -250,6 +256,8 @@ function submit_button() {
         clear_text_area();
         submitQuestion = "start";
         display("Thank you, " + new_animal + " has been added successfully!");
+        show_element("buttonDownload");
+        hide_element("buttonSubmit");
         tree_state_saved = edit_in_tree(path_to_animal, tree_state_saved, { value: new_question,
             left: tree_state,
             right: new_animal });
@@ -275,6 +283,22 @@ function downloadJSONFile(data, filename) {
     a.click();
     // Release the object URL
     URL.revokeObjectURL(url);
+}
+/**
+ *
+ * @param id
+ */
+function hide_element(id) {
+    document.getElementById(id).style.opacity = "0";
+    document.getElementById(id).style.cursor = "default";
+}
+/**
+ *
+ * @param id
+ */
+function show_element(id) {
+    document.getElementById(id).style.opacity = "1";
+    document.getElementById(id).style.cursor = "pointer";
 }
 /**
  *
