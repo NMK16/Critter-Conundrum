@@ -60,12 +60,15 @@ function edit_in_tree(path_to_animal, tree, new_input) {
  * representing animals.
  * @param path_to_animal - List containing directions to desired leaf.
  */
-function add_new_animal(tree, path_to_animal) {
+function add_new_animal() {
     submitQuestion = "animal";
-    new_animal_html();
-    console.log("Sorry but it seems that I don't know your animal.");
-    console.log("What animal were you thinking of? -> ");
-    display("Sorry but it seems that I don't know your animal. <br/>What animal were you thinking of?");
+    clear_text_area();
+    show_element("buttonSubmit");
+    show_element("text-input");
+    show_element("text-input-div");
+    hide_element("buttonDownload");
+    display("Sorry but it seems that I don't know your animal" +
+        ". <br/>What animal were you thinking of?");
 }
 /** Allows you to go back a step by running game_turn on top of game_history
  * stack.
@@ -103,15 +106,13 @@ function go_left_or_right(answer, tree, new_branch) {
 function process_leaf(tree) {
     if (userInput === "y") {
         game_started = false;
-        console.log("I'm the best! I guessed your animal in " + turns +
-            " questions!");
         display("I'm the best! I guessed your animal (" + tree + ") in " +
             turns + " questions!");
     }
     else if (userInput === "n") {
         game_started = false;
         //fill json file with new animal
-        add_new_animal(tree, path_to_animal);
+        add_new_animal();
     }
     else if (userInput === "b") {
         go_back();
@@ -146,29 +147,27 @@ function game_turn() {
         process_node(tree_state);
     }
 }
-/**
- *
- * @param message
+/** Displays message on text box.
+ * @param message - String representing message to be displayed.
  */
 function display(message) {
     document.getElementById("text-box").innerHTML = message;
 }
-/**
- *
+/** Displays either the question or the animal, depending on if tree_state is a
+ * tree or a singular leaf.
  */
 function log_tree_value() {
     if (typeof (tree_state) !== "string") {
-        console.log(tree_state.value + " (y/n/b) -> ");
         display(tree_state.value);
     }
     else {
-        console.log("Are you thinking of a " + tree_state + " (y/n/b) -> ");
         display("Are you thinking of a " + tree_state + "?");
     }
 }
 //Website functions
-/**
- *
+/** Resets the game by resetting tree_state to tree_state_saved, hiding the
+ * submit and download button. Clearing turns, path_to_animal, game_history and
+ * setting game_started to true.
  */
 function start() {
     hide_element("buttonSubmit");
@@ -183,8 +182,8 @@ function start() {
     game_started = true;
 }
 window.start = start;
-/**
- *
+/** If game has started and the yes button is pressed on the website,
+ * then it sets user_input to "y" and runs game_turn.
  */
 function yes_button() {
     if (game_started) {
@@ -193,8 +192,8 @@ function yes_button() {
     }
 }
 window.yes_button = yes_button;
-/**
- *
+/** If game has started and the no button is pressed on the website,
+ * then it sets user_input to "n" and runs game_turn.
  */
 function no_button() {
     if (game_started) {
@@ -203,8 +202,8 @@ function no_button() {
     }
 }
 window.no_button = no_button;
-/**
- *
+/** If game has started and the back button is pressed on the website,
+ * then it sets user_input to "b" and runs game_turn.
  */
 function back_button() {
     if (game_started) {
@@ -213,47 +212,34 @@ function back_button() {
     }
 }
 window.back_button = back_button;
-/**
- *
+/** Clears the text area by setting its value to "".
  */
 function clear_text_area() {
     const textInput = document.getElementById("text-input");
     textInput.value = "";
 }
-/**
- *
- */
-function new_animal_html() {
-    clear_text_area();
-    show_element("buttonSubmit");
-    show_element("text-input");
-    show_element("text-input-div");
-    hide_element("buttonDownload");
-}
-/**
- *
- * @returns
+/** Retrieves contents of the text box.
+ * @returns - String in the text box
  */
 function read_text_box() {
     const textInput = document.getElementById("text-input");
     return textInput.value;
 }
-/**
- *
+/** Saves either a user created animal or a question, depending on if
+ * animal has been found or not, while displaying relevant text instructions.
+ * Updates tree_state_saved if question was submitted.
  */
 function submit_button() {
     if (submitQuestion === "animal") {
         new_animal = read_text_box();
-        clear_text_area();
         show_element("buttonSubmit");
-        display("Give me a question that separates " +
-            new_animal + " from " + tree_state + ". <br/>Please make it as broad as possible," +
+        display("Give me a yes or no question that separates " + new_animal +
+            " from " + tree_state + ". <br/>Please make it as broad as possible," +
             " where your animal has the answer yes.");
         submitQuestion = "question";
     }
     else if (submitQuestion === "question") {
         new_question = read_text_box();
-        clear_text_area();
         submitQuestion = "start";
         display("Thank you, " + new_animal + " has been added successfully!");
         show_element("buttonDownload");
@@ -262,26 +248,21 @@ function submit_button() {
             left: tree_state,
             right: new_animal });
     }
+    clear_text_area();
 }
 window.submit_button = submit_button;
-/**
- *
+/** Sends a download link to the jsonfile containing 'data' and namned 'filename'.
  * @param data
  * @param filename
  */
 function downloadJSONFile(data, filename) {
-    // Convert data to JSON string
     const jsonData = JSON.stringify(data, null, 2);
-    // Create a Blob object from the JSON string
     const blob = new Blob([jsonData], { type: 'application/json' });
-    // Create a temporary URL for the Blob
     const url = URL.createObjectURL(blob);
-    // Create a temporary anchor element
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename; // Set the download attribute with the filename
+    a.download = filename;
     a.click();
-    // Release the object URL
     URL.revokeObjectURL(url);
 }
 /**
@@ -321,10 +302,26 @@ module.exports={
       "value": "Is it a carnivore?",
       "left": {
         "value": "Does it have an exoskeleton?",
-        "left": "Salmon",
+        "left": {
+          "value": "Does it give birth to live animals?",
+          "left": {
+            "value": "Is it typically kept as a pet?",
+            "left": "Salmon",
+            "right": "Gold fish"
+          },
+          "right": "Dolphin"
+        },
         "right": "Crab"
       },
-      "right": "Shark"
+      "right": {
+        "value": "is it a mammal?",
+        "left": {
+          "value": "Is it a reptile?",
+          "left": "Shark",
+          "right": "Crocodile"
+        },
+        "right": "Killer whale"
+      }
     },
     "right": {
       "value": "Is it a carnivore?",
@@ -339,7 +336,11 @@ module.exports={
       "left": {
         "value": "Is it a bird?",
         "left": "Ant",
-        "right": "Chicken"
+        "right": {
+          "value": "Does it live in cold climates?",
+          "left": "Chicken",
+          "right": "Penguin"
+        }
       },
       "right": "Snake"
     },
@@ -351,12 +352,20 @@ module.exports={
           "value": "Does it have spots?",
           "left": {
             "value": "Does your animal exist in northern nature?",
-            "left": "Lion",
+            "left": {
+              "value": "Does it have stripes?",
+              "left": "Lion",
+              "right": "Tiger"
+            },
             "right": {
               "value": "Is it bipedal?",
               "left": {
                 "value": "Does it have white fur?",
-                "left": "Bear",
+                "left": {
+                  "value": "Does it hibernate during the winter?",
+                  "left": "Bear",
+                  "right": "Fox"
+                },
                 "right": "Polar bear"
               },
               "right": "Human"
@@ -364,16 +373,32 @@ module.exports={
           },
           "right": "Cheetah"
         },
-        "right": "Elephant"
+        "right": {
+          "value": "Is the animal typically found in bodies of water?",
+          "left": {
+            "value": "Does it have a long neck?",
+            "left": {
+              "value": "Is it smaller than a fox?",
+              "left": "Elephant",
+              "right": "Squirrel"
+            },
+            "right": "Giraffe"
+          },
+          "right": "Capybara"
+        }
       },
       "right": {
-        "value": "Does it have hair? (not fur!)",
+        "value": "Does it have hair? (not fur)",
         "left": {
           "value": "Does it eat cat food?",
           "left": {
             "value": "Is your animal an herbivore?",
             "left": "Dog",
-            "right": "Bunny"
+            "right": {
+              "value": "Is it larger than the average dog?",
+              "left": "Bunny",
+              "right": "Sheep"
+            }
           },
           "right": "Cat"
         },
