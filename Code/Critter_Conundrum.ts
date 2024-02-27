@@ -1,12 +1,12 @@
 import * as BinaryTreeData from './animal_data.json';
-import { List, head, list, is_null, tail, append } from './../lib/list'
-import { Stack, pop, top, empty, push, is_empty } from './../lib/stack'
-//to run: tsc Critter_Conundrum.ts --resolveJsonModule && node Critter_Conundrum.js (for linux)
+import { List, head, list, is_null, tail, append } from './../lib/list';
+import { Stack, pop, top, empty, push, is_empty } from './../lib/stack';
+//to run: tsc && node Critter_Conundrum.js (for linux)
 
 //Global types
 export type Leaf = string;
 export type Tree = {value: string, left: Tree, right: Tree} | Leaf;
-export type nonEmptyTree = {value: string, left: Tree, right: Tree};
+export type NonEmptyTree = {value: string, left: Tree, right: Tree};
 
 //Global variables
 let path_to_animal: List<string> = list();
@@ -24,7 +24,7 @@ let game_history: Stack<Tree> = empty();
  */
 export function edit_in_tree(path_to_animal: List<string>, 
 							 tree: Tree, 
-							 new_input: nonEmptyTree): Tree {
+							 new_input: NonEmptyTree): Tree {
 	if(is_null(path_to_animal)) {
 		return new_input;
 	} else if(head(path_to_animal) === "right") {
@@ -63,16 +63,16 @@ export function edit_in_tree(path_to_animal: List<string>,
 function write_to_json(question: string, old_animal: string, 
 					   new_animal: string, path_to_animal: List<string>): void {
 	const fs = require('fs');
-	const fileName = './animal_data.json';
-	let file = require(fileName);
+	const file_name = './animal_data.json';
+	let file = require(file_name);
 		
 	file = edit_in_tree(path_to_animal, BinaryTreeData, 
 						{value: question, left: old_animal, right: new_animal});
 		
-	fs.writeFile(fileName, JSON.stringify(file, null, 2), 
-				 function writeJSON(err: string) {
+	fs.writeFile(file_name, JSON.stringify(file, null, 2), 
+				 function write_json(err: string) {
 		if (err) return console.log(err);
-		console.log('writing to ' + fileName);
+		console.log('writing to ' + file_name);
 	});
 }
 
@@ -84,31 +84,31 @@ function write_to_json(question: string, old_animal: string,
  */
 export function add_new_animal(tree: string, 
 							   path_to_animal: List<string>): void {
-	let userInput_animal: string = "";
-	let userInput_question: string = "";
+	let user_input_animal: string = "";
+	let user_input_question: string = "";
 	const readline2 = require('readline').createInterface({
 		input: process.stdin,
 		output: process.stdout
 	});
 	console.log("Sorry but it seems that I don't know your animal.");
 	readline2.question("What animal were you thinking of? -> ", 
-					   (userInput: string)  => {
-		userInput_animal = userInput;
+					   (user_input: string)  => {
+		user_input_animal = user_input;
 		readline2.close();
 	
 		const readline3 = require('readline').createInterface({
 			input: process.stdin,
 			output: process.stdout
 		});
-		console.log("Give me a question that separates " + 
-					userInput_animal + " from " + tree + ".");
+		console.log("Give me a yes or no question that separates " + 
+					user_input_animal + " from " + tree + ".");
 		readline3.question("Please make it as broad as possible," + 
 						   " where your animal has the answer yes. -> ", 
-						   (userInput: string)  => {
-			userInput_question = userInput;
+						   (user_input: string)  => {
+			user_input_question = user_input;
 			readline3.close();
-			write_to_json(userInput_question, tree, 
-						  userInput_animal, path_to_animal);
+			write_to_json(user_input_question, tree, 
+						  user_input_animal, path_to_animal);
 		});});
 }
 
@@ -135,7 +135,7 @@ export function go_back(tree: Tree): void {
  * representing animals.
  * @param new_branch Either left or right branch of tree.
  */
-export function go_left_or_right(answer: string, tree: nonEmptyTree, 
+export function go_left_or_right(answer: string, tree: NonEmptyTree, 
 							     new_branch: Tree): void {
 	path_to_animal = append(path_to_animal, list(answer));
 	turns++;
@@ -153,15 +153,15 @@ export function process_leaf(tree: string): void {
 		output: process.stdout
 	});
 	readline.question("Are you thinking of a " + tree + " (y/n/b) -> ", 
-					  (userInput: string)  => {
+					  (user_input: string)  => {
 		readline.close();
-		if(userInput === "y") {
+		if(user_input === "y") {
 			console.log("I'm the best! I guessed your animal in " + turns + 
 						" questions!")
-		} else if (userInput === "n") {
+		} else if (user_input === "n") {
 			//fill json file with new animal
 			add_new_animal(tree, path_to_animal);
-		} else if (userInput === "b") {
+		} else if (user_input === "b") {
 			go_back(tree);
 		} else {
 			console.log("Wrong input");
@@ -174,19 +174,19 @@ export function process_leaf(tree: string): void {
  * @param tree - Binary tree with nodes representing questions and leaves 
  * representing animals.
  */
-export function process_node(tree: nonEmptyTree): void {
+export function process_node(tree: NonEmptyTree): void {
 	const readline = require('readline').createInterface({
 		input: process.stdin,
 		output: process.stdout
 	});
-	readline.question(tree.value + " (y/n/b) -> ", (userInput: string)  => {
-	if(userInput === "y"){
+	readline.question(tree.value + " (y/n/b) -> ", (user_input: string)  => {
+	if(user_input === "y"){
 		readline.close();
 		go_left_or_right("right", tree, tree.right);
-	} else if(userInput === "n" ){
+	} else if(user_input === "n" ){
 		readline.close();
 		go_left_or_right("left", tree, tree.left);
-	} else if (userInput === "b") {
+	} else if (user_input === "b") {
 		readline.close();
 		go_back(tree);
 	} else {

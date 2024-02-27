@@ -6,10 +6,26 @@
       "value": "Is it a carnivore?",
       "left": {
         "value": "Does it have an exoskeleton?",
-        "left": "Salmon",
+        "left": {
+          "value": "Does it give birth to live animals?",
+          "left": {
+            "value": "Is it typically kept as a pet?",
+            "left": "Salmon",
+            "right": "Gold fish"
+          },
+          "right": "Dolphin"
+        },
         "right": "Crab"
       },
-      "right": "Shark"
+      "right": {
+        "value": "is it a mammal?",
+        "left": {
+          "value": "Is it a reptile?",
+          "left": "Shark",
+          "right": "Crocodile"
+        },
+        "right": "Killer whale"
+      }
     },
     "right": {
       "value": "Is it a carnivore?",
@@ -24,7 +40,11 @@
       "left": {
         "value": "Is it a bird?",
         "left": "Ant",
-        "right": "Chicken"
+        "right": {
+          "value": "Does it live in cold climates?",
+          "left": "Chicken",
+          "right": "Penguin"
+        }
       },
       "right": "Snake"
     },
@@ -36,12 +56,20 @@
           "value": "Does it have spots?",
           "left": {
             "value": "Does your animal exist in northern nature?",
-            "left": "Lion",
+            "left": {
+              "value": "Does it have stripes?",
+              "left": "Lion",
+              "right": "Tiger"
+            },
             "right": {
               "value": "Is it bipedal?",
               "left": {
                 "value": "Does it have white fur?",
-                "left": "Bear",
+                "left": {
+                  "value": "Does it hibernate during the winter?",
+                  "left": "Bear",
+                  "right": "Fox"
+                },
                 "right": "Polar bear"
               },
               "right": "Human"
@@ -49,16 +77,32 @@
           },
           "right": "Cheetah"
         },
-        "right": "Elephant"
+        "right": {
+          "value": "Is the animal typically found in bodies of water?",
+          "left": {
+            "value": "Does it have a long neck?",
+            "left": {
+              "value": "Is it smaller than a fox?",
+              "left": "Elephant",
+              "right": "Squirrel"
+            },
+            "right": "Giraffe"
+          },
+          "right": "Capybara"
+        }
       },
       "right": {
-        "value": "Does it have hair? (not fur!)",
+        "value": "Does it have hair? (not fur)",
         "left": {
           "value": "Does it eat cat food?",
           "left": {
             "value": "Is your animal an herbivore?",
             "left": "Dog",
-            "right": "Bunny"
+            "right": {
+              "value": "Is it larger than the average dog?",
+              "left": "Bunny",
+              "right": "Sheep"
+            }
           },
           "right": "Cat"
         },
