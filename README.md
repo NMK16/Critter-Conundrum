@@ -1,5 +1,6 @@
 ToDo:
 
+* How to give type to BinaryTreeData
 * Project diary
 * Testcases - hur testar man funktioner som returnerar void? Jest hakar upp sig
 * Project documentation
