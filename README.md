@@ -6,3 +6,4 @@ ToDo:
 * Project documentation
 * Project presentation
 * Ask Project manager if red-black can be used.
+* Ask project managers about errors in LaTex
