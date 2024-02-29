@@ -9,3 +9,5 @@ ToDo:
 * Ask project managers about errors in LaTex
 
 * make repo public, test on new computer if it can be ran.
+
+* individual reflection
