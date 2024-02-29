@@ -3,4 +3,6 @@ module.exports = {
         '^.+\\.ts?$': 'ts-jest'
         },
     //collectCoverage: true,
+    testEnvironment: "jsdom",
+
 };
