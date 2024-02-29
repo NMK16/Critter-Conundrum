@@ -11,3 +11,5 @@ ToDo:
 * make repo public, test on new computer if it can be ran.
 
 * individual reflection
+
+* Ändra funktions specifikationer i html ts filen. Skriva till några nya på de som saknar.
