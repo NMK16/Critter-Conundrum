@@ -1,22 +1,23 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.enable_test_mode = exports.read_tree_state = exports.set_tree_state = exports.submit_button = exports.back_button = exports.no_button = exports.yes_button = exports.start = exports.process_node = exports.process_leaf = exports.go_back = exports.edit_in_tree = exports.new_question = exports.new_animal = exports.submit_question = exports.game_started = exports.user_input = exports.game_history = exports.turns = exports.path_to_animal = exports.test_output = exports.test_mode = exports.tree_state_saved = void 0;
 const BinaryTreeData = require("./../animal_data.json");
 const list_1 = require("./../../lib/list");
 const stack_1 = require("./../../lib/stack");
 //Global variables
-let tree_state_saved = BinaryTreeData;
-let path_to_animal;
-let turns = 0;
-let game_history;
+exports.tree_state_saved = BinaryTreeData;
 let tree_state;
-let userInput = "start";
-let game_started = false;
-let submitQuestion = "start";
-let new_animal = "";
-let new_question = "";
-/** Allows editing the value of a leaf
- *  in the binary tree.
+exports.test_mode = false;
+exports.test_output = "";
+exports.turns = 0;
+exports.user_input = "start";
+exports.game_started = false;
+exports.submit_question = "start";
+exports.new_animal = "";
+exports.new_question = "";
+/**Allows editing the value of a leaf
+ * in the binary tree.
  * @param path_to_animal - List containing directions to desired leaf.
  * @param tree - Binary tree with nodes representing questions and leaves
  * representing animals.
@@ -54,14 +55,12 @@ function edit_in_tree(path_to_animal, tree, new_input) {
         return "error: incorrect list format";
     }
 }
-/** Asks user what animal they were thinking of and a question to distinguish
- * that animal and the old.
- * @param tree - Binary tree with nodes representing questions and leaves
- * representing animals.
- * @param path_to_animal - List containing directions to desired leaf.
+exports.edit_in_tree = edit_in_tree;
+/**Asks user what animal they were thinking of, sets submit_question to "animal",
+ * clears text area and finaly shows/hides html elements
  */
 function add_new_animal() {
-    submitQuestion = "animal";
+    exports.submit_question = "animal";
     clear_text_area();
     show_element("buttonSubmit");
     show_element("text-input");
@@ -70,24 +69,23 @@ function add_new_animal() {
     display("Sorry but it seems that I don't know your animal" +
         ". <br/>What animal were you thinking of?");
 }
-/** Allows you to go back a step by running game_turn on top of game_history
- * stack.
- * @param tree - Binary tree with nodes representing questions and leaves
- * representing animals.
+/**Allows you to go back a step by reverting tree_state to the top of
+ * game_history stack. Displays value of tree with log_tree_value function.
  */
 function go_back() {
-    if (!(0, stack_1.is_empty)(game_history)) {
-        turns--;
-        path_to_animal = (0, list_1.tail)(path_to_animal);
-        tree_state = (0, stack_1.top)(game_history);
-        game_history = (0, stack_1.pop)(game_history);
+    if (!(0, stack_1.is_empty)(exports.game_history)) {
+        exports.turns--;
+        exports.path_to_animal = (0, list_1.tail)(exports.path_to_animal);
+        tree_state = (0, stack_1.top)(exports.game_history);
+        exports.game_history = (0, stack_1.pop)(exports.game_history);
     }
     else {
         console.log("You haven't made a move to undo yet.");
     }
     log_tree_value();
 }
-/** Traverses either to right or left branch of binary tree.
+exports.go_back = go_back;
+/**Traverses either to right or left branch of binary tree.
  * @param answer - Either "left" or "right"
  * @param tree - Binary tree with nodes representing questions and leaves
  * representing animals.
@@ -95,49 +93,49 @@ function go_back() {
  */
 function go_left_or_right(answer, tree, new_branch) {
     tree_state = new_branch;
-    path_to_animal = (0, list_1.append)(path_to_animal, (0, list_1.list)(answer));
-    turns++;
-    game_history = (0, stack_1.push)(tree, game_history);
+    exports.path_to_animal = (0, list_1.append)(exports.path_to_animal, (0, list_1.list)(answer));
+    exports.turns++;
+    exports.game_history = (0, stack_1.push)(tree, exports.game_history);
 }
-/** Inquires if users animal has been reached.
- * 	If not, runs add_new_animal function.
+/**Inquires if users animal has been reached.
+ * If not, runs add_new_animal function.
  * @param tree - Leaf containing an animal.
  */
 function process_leaf(tree) {
-    if (userInput === "y") {
-        game_started = false;
+    if (exports.user_input === "y") {
+        exports.game_started = false;
         display("I'm the best! I guessed your animal (" + tree + ") in " +
-            turns + " questions!");
+            exports.turns + " questions!");
     }
-    else if (userInput === "n") {
-        game_started = false;
+    else if (exports.user_input === "n") {
+        exports.game_started = false;
         //fill json file with new animal
         add_new_animal();
     }
-    else if (userInput === "b") {
+    else if (exports.user_input === "b") {
         go_back();
     }
 }
-/** Requests user what move they want to make between yes, no or back.
+exports.process_leaf = process_leaf;
+/**Requests user what move they want to make between yes, no or back.
  * @param tree - Binary tree with nodes representing questions and leaves
  * representing animals.
  */
 function process_node(tree) {
-    if (userInput === "y") {
+    if (exports.user_input === "y") {
         go_left_or_right("right", tree, tree.right);
     }
-    else if (userInput === "n") {
+    else if (exports.user_input === "n") {
         go_left_or_right("left", tree, tree.left);
     }
-    else if (userInput === "b") {
+    else if (exports.user_input === "b") {
         go_back();
     }
     log_tree_value();
 }
-/** Determines if a leaf or node has been reached and runs appropriate function.
+exports.process_node = process_node;
+/**Determines if a leaf or node has been reached and runs appropriate function.
  * Each function call represents a game turn.
- * @param tree - Binary tree with nodes representing questions and leaves
- * representing animals.
  */
 function game_turn() {
     if (typeof (tree_state) === "string") {
@@ -147,13 +145,18 @@ function game_turn() {
         process_node(tree_state);
     }
 }
-/** Displays message on text box.
+/**Displays message on text box.
  * @param message - String representing message to be displayed.
  */
 function display(message) {
-    document.getElementById("text-box").innerHTML = message;
+    if (!exports.test_mode) {
+        document.getElementById("text-box").innerHTML = message;
+    }
+    else {
+        exports.test_output = message;
+    }
 }
-/** Displays either the question or the animal, depending on if tree_state is a
+/**Displays either the question or the animal, depending on if tree_state is a
  * tree or a singular leaf.
  */
 function log_tree_value() {
@@ -165,99 +168,115 @@ function log_tree_value() {
     }
 }
 //Website functions
-/** Resets the game by resetting tree_state to tree_state_saved, hiding the
+/**Resets the game by resetting tree_state to tree_state_saved, hiding the
  * submit and download button. Clearing turns, path_to_animal, game_history and
  * setting game_started to true.
  */
 function start() {
     hide_element("buttonSubmit");
     hide_element("buttonDownload");
-    submitQuestion = "start";
-    turns = 0;
-    tree_state = tree_state_saved;
+    exports.submit_question = "start";
+    exports.user_input = "start";
+    exports.turns = 0;
+    tree_state = exports.tree_state_saved;
     hide_element("text-input");
-    path_to_animal = (0, list_1.list)();
-    game_history = (0, stack_1.empty)();
+    exports.path_to_animal = (0, list_1.list)();
+    exports.game_history = (0, stack_1.empty)();
     log_tree_value();
-    game_started = true;
+    exports.game_started = true;
 }
+exports.start = start;
 window.start = start;
-/** If game has started and the yes button is pressed on the website,
+/**If game has started and the yes button is pressed on the website,
  * then it sets user_input to "y" and runs game_turn.
  */
 function yes_button() {
-    if (game_started) {
-        userInput = "y";
+    if (exports.game_started) {
+        exports.user_input = "y";
         game_turn();
     }
 }
+exports.yes_button = yes_button;
 window.yes_button = yes_button;
-/** If game has started and the no button is pressed on the website,
+/**If game has started and the no button is pressed on the website,
  * then it sets user_input to "n" and runs game_turn.
  */
 function no_button() {
-    if (game_started) {
-        userInput = "n";
+    if (exports.game_started) {
+        exports.user_input = "n";
         game_turn();
     }
 }
+exports.no_button = no_button;
 window.no_button = no_button;
-/** If game has started and the back button is pressed on the website,
+/**If game has started and the back button is pressed on the website,
  * then it sets user_input to "b" and runs game_turn.
  */
 function back_button() {
-    if (game_started) {
-        userInput = "b";
+    if (exports.game_started) {
+        exports.user_input = "b";
         game_turn();
     }
 }
+exports.back_button = back_button;
 window.back_button = back_button;
-/** Clears the text area by setting its value to "".
+/**Clears the text area by setting its value to "".
  */
 function clear_text_area() {
-    const textInput = document.getElementById("text-input");
-    textInput.value = "";
+    if (!exports.test_mode) {
+        const text_input = document.getElementById("text-input");
+        text_input.value = "";
+    }
 }
-/** Retrieves contents of the text box.
- * @returns - String in the text box
+/**Retrieves contents of the text box.
+ * @returns String in the text box
  */
 function read_text_box() {
-    const textInput = document.getElementById("text-input");
-    return textInput.value;
+    if (!exports.test_mode) {
+        const text_input = document.getElementById("text-input");
+        return text_input.value;
+    }
+    else {
+        return "test mode enabled";
+    }
 }
-/** Saves either a user created animal or a question, depending on if
+/**Saves either a user created animal or a question, depending on if
  * animal has been found or not, while displaying relevant text instructions.
  * Updates tree_state_saved if question was submitted.
  */
 function submit_button() {
-    if (submitQuestion === "animal") {
-        new_animal = read_text_box();
+    if (exports.submit_question === "animal") {
+        exports.new_animal = read_text_box();
         show_element("buttonSubmit");
-        display("Give me a yes or no question that separates " + new_animal +
+        display("Give me a yes or no question that separates " + exports.new_animal +
             " from " + tree_state + ". <br/>Please make it as broad as possible," +
             " where your animal has the answer yes.");
-        submitQuestion = "question";
+        exports.submit_question = "question";
     }
-    else if (submitQuestion === "question") {
-        new_question = read_text_box();
-        submitQuestion = "start";
-        display("Thank you, " + new_animal + " has been added successfully!");
+    else if (exports.submit_question === "question") {
+        exports.new_question = read_text_box();
+        exports.submit_question = "start";
+        display("Thank you, " + exports.new_animal + " has been added successfully!");
         show_element("buttonDownload");
         hide_element("buttonSubmit");
-        tree_state_saved = edit_in_tree(path_to_animal, tree_state_saved, { value: new_question,
-            left: tree_state,
-            right: new_animal });
+        if (exports.new_animal !== "" && exports.new_question !== "") {
+            exports.tree_state_saved = edit_in_tree(exports.path_to_animal, exports.tree_state_saved, { value: exports.new_question,
+                left: tree_state,
+                right: exports.new_animal });
+        }
     }
     clear_text_area();
 }
+exports.submit_button = submit_button;
 window.submit_button = submit_button;
-/** Sends a download link to the jsonfile containing 'data' and namned 'filename'.
- * @param data
- * @param filename
+/**Sends a download link to the jsonfile containing 'data' and names it
+ * 'filename'.
+ * @param data - Tree to be put in the new json file.
+ * @param filename - String representing the files name.
  */
-function downloadJSONFile(data, filename) {
-    const jsonData = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonData], { type: 'application/json' });
+function download_json_file(data, filename) {
+    const json_data = JSON.stringify(data, null, 2);
+    const blob = new Blob([json_data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -265,33 +284,60 @@ function downloadJSONFile(data, filename) {
     a.click();
     URL.revokeObjectURL(url);
 }
-/**
- *
- * @param id
+/**Hides element from the website by lowering the opacity to "0" and the cursor
+ * to "default".
+ * @param id - String respresenting the elements ID.
  */
 function hide_element(id) {
-    document.getElementById(id).style.opacity = "0";
-    document.getElementById(id).style.cursor = "default";
+    if (!exports.test_mode) {
+        document.getElementById(id).style.opacity = "0";
+        document.getElementById(id).style.cursor = "default";
+    }
 }
-/**
- *
- * @param id
+/**Shows element from the website by increasing the opacity to "1" and the
+ * cursor to "pointer".
+ * @param id - String respresenting the elements ID.
  */
 function show_element(id) {
-    document.getElementById(id).style.opacity = "1";
-    document.getElementById(id).style.cursor = "pointer";
+    if (!exports.test_mode) {
+        document.getElementById(id).style.opacity = "1";
+        document.getElementById(id).style.cursor = "pointer";
+    }
 }
-/**
- *
+/**If new_animal and new_question isn't an empty string, downloads
+ * Json file containing tree_state_saved and with the file name
+ * "animal_data.json".
  */
 function download_json() {
-    if (new_animal !== "" && new_question !== "") {
-        downloadJSONFile(tree_state_saved, "animal_data.json");
+    if (exports.new_animal !== "" && exports.new_question !== "") {
+        download_json_file(exports.tree_state_saved, "animal_data.json");
     }
-    new_animal = "";
-    new_question = "";
+    exports.new_animal = "";
+    exports.new_question = "";
 }
 window.download_json = download_json;
+//Function for testing framework
+/**Sets tree_state variable to parameter tree.
+ * @param tree
+ */
+function set_tree_state(tree) {
+    tree_state = tree;
+}
+exports.set_tree_state = set_tree_state;
+/**Reads value of tree_state variable and returns it.
+ * @returns tree_state value
+ */
+function read_tree_state() {
+    return tree_state;
+}
+exports.read_tree_state = read_tree_state;
+/**Enables test mode. This prevents the program from running code that interacts
+ * with the html document, therefore avoiding crashes.
+ */
+function enable_test_mode() {
+    exports.test_mode = true;
+}
+exports.enable_test_mode = enable_test_mode;
 
 },{"./../../lib/list":3,"./../../lib/stack":4,"./../animal_data.json":2}],2:[function(require,module,exports){
 module.exports={
@@ -354,7 +400,11 @@ module.exports={
             "value": "Does your animal exist in northern nature?",
             "left": {
               "value": "Does it have stripes?",
-              "left": "Lion",
+              "left": {
+                "value": "Does it have thumbs?",
+                "left": "Lion",
+                "right": "Ape"
+              },
               "right": "Tiger"
             },
             "right": {
@@ -379,7 +429,11 @@ module.exports={
             "value": "Does it have a long neck?",
             "left": {
               "value": "Is it smaller than a fox?",
-              "left": "Elephant",
+              "left": {
+                "value": "Does it fight by ramming into others?",
+                "left": "Elephant",
+                "right": "Rhinoceros"
+              },
               "right": "Squirrel"
             },
             "right": "Giraffe"
@@ -408,7 +462,11 @@ module.exports={
           "right": {
             "value": "Does it have a curly tail?",
             "left": "Cow",
-            "right": "Pig"
+            "right": {
+              "value": "Is it a baby?",
+              "left": "Pig",
+              "right": "Baby pig"
+            }
           }
         }
       }
