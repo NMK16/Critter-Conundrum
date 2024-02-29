@@ -2,7 +2,7 @@ module.exports = {
     transform: {
         '^.+\\.ts?$': 'ts-jest'
         },
-    //collectCoverage: true,
+    collectCoverage: true,
     testEnvironment: "jsdom",
 
 };
