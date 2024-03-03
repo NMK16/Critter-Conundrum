@@ -15,3 +15,6 @@ ToDo:
 * Ändra funktions specifikationer i html ts filen. Skriva till några nya på de som saknar.
 
 * discussion: we couldn't assign a type to BinaryTreeData, we condulted our TA but we concluded it was "överkurs"
+
+* Lägg till styrkor med vårt projekt i diskussionen.
+* Berätta om projektgången i diskussionen. (t.ex. terminal versionen)
