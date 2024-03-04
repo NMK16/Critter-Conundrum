@@ -5,31 +5,6 @@ import { edit_in_tree, Tree, back_button, set_tree_state, start, read_tree_state
          path_to_animal} from './Website/Critter_Conundrum_HTML';
 import { list } from './../lib/list';
 
-//Tests for Critter_Conundrum.ts
-// test('Edit in tree replaces pig with a question to distinguish Horse from Zebra', () => {
-//     expect(edit_in_tree_ts(list("right", "right"), tree, {"value": "Does it have stripes", "left": "Pig", "right": "Zebra"})).toStrictEqual(result_tree);
-// });
-
-// test('Go back function goes backwards upon call', () =>{
-//     let path_to_animal = list("right");
-//     let game_history = empty();
-//     const old_tree: Tree = {"value": "Does it have legs", "left": "Snake", "right": {"value": "Does it live on land?", "left": "Pidgeon", "right": "Ape"}};
-//     game_history = push(old_tree, game_history);
-
-//     let game_turn_recieved: Tree = "";
-//     function game_turn(tree: Tree): void {
-//         game_turn_recieved = tree;
-//     }
-
-//     const tree: Tree = {"value": "Does it live on land?", "left": "Pidgeon", "right": "Ape"};
-
-//     //go_back_ts(tree);
-    
-//     //expect(path_to_animal).toStrictEqual(list());
-//     //expect(game_history).toStrictEqual(empty());
-//     //expect(game_turn_recieved).toStrictEqual(old_tree);
-// });
-
 //Tests for Critter_Conundrum_HTML.ts
 
 test('Answering yes, then going back returns same tree as when started', () => {
