@@ -75,7 +75,7 @@ test('Answering no when the tree is a single leaf ', () => {
     
     expect(submit_question).toStrictEqual("animal");
 });
-test('Testing is submitting new animals and questions works', () => {
+test('Submitting new animals and questions works', () => {
     enable_test_mode();
     const tree: Tree = "Elephant";
     start(); // Asks if Elephant was the animal the user was thinking of
